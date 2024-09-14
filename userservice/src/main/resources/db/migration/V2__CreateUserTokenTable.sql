@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS api_token (
+    id VARCHAR(255) PRIMARY KEY,
+    FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE,
+    expiery_date TIMESTAMP NOT NULL,
+    creation_date TIMESTAMP NOT NULL,
+    is_active BIT NOT NULL
+);
