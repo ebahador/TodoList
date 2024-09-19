@@ -8,19 +8,20 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 @Configuration
-@PropertySource("classpath:dbconnection.properties")
+@PropertySource("classpath:application.properties")
 public class DataSourceConfig {
   private static final Logger logger = LoggerFactory.getLogger(DataSourceConfig.class);
 
-  @Value("${URL}")
+  @Value("${spring.datasource.url}")
   private String url;
 
-  @Value("${USERNAME}")
+  @Value("${spring.datasource.username}")
   private String username;
 
-  @Value("${PASSWORD}")
+  @Value("${spring.datasource.password}")
   private String password;
 
   @Bean
@@ -31,5 +32,10 @@ public class DataSourceConfig {
     basicDataSource.setUsername(username);
     basicDataSource.setPassword(password);
     return basicDataSource;
+  }
+
+  @Bean
+  public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+    return new JdbcTemplate(dataSource);
   }
 }
