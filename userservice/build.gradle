@@ -70,3 +70,10 @@ tasks.named('test') {
 tasks.named('build') {
     dependsOn 'spotlessApply'
 }
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(23))
+    }
+}
+
