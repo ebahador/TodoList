@@ -1,4 +1,4 @@
-package com.todolist.userservice.model;
+package com.todolist.userservice.model.token;
 
 public class Token {
   private String userId;
