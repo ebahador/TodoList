@@ -1,7 +1,8 @@
-package com.todolist.userservice.route.utils;
+package com.todolist.userservice.router.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 public class CommonUtils {
@@ -18,7 +19,8 @@ public class CommonUtils {
     return jsonString;
   }
 
-  public static <T> T deserialize(String jsonString, Class<T> targetClass, Logger logger) {
+  public static <T> @Nullable T deserialize(
+      String jsonString, Class<T> targetClass, Logger logger) {
     ObjectMapper mapper = new ObjectMapper();
     try {
       return mapper.readValue(jsonString, targetClass);

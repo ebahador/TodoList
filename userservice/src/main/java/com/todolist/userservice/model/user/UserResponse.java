@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CreateUserResponse {
+public class UserResponse {
   private final String id;
   private final String fullname;
   private final String email;
   private final long lastLogin;
 
-  private CreateUserResponse(@NotNull Builder builder) {
+  private UserResponse(@NotNull Builder builder) {
     this.id = builder.id;
     this.fullname = builder.fullname;
     this.email = builder.email;
@@ -40,17 +40,17 @@ public class CreateUserResponse {
     private String email;
     private long lastLogin;
 
-    public CreateUserResponse build() {
-      return new CreateUserResponse(this);
+    public UserResponse build() {
+      return new UserResponse(this);
     }
 
     public Builder() {}
 
-    public Builder(@NotNull CreateUserResponse createUserResponse) {
-      this.id = createUserResponse.id;
-      this.fullname = createUserResponse.fullname;
-      this.email = createUserResponse.email;
-      this.lastLogin = createUserResponse.lastLogin;
+    public Builder(@NotNull UserResponse userResponse) {
+      this.id = userResponse.id;
+      this.fullname = userResponse.fullname;
+      this.email = userResponse.email;
+      this.lastLogin = userResponse.lastLogin;
     }
 
     public Builder id(String val) {
