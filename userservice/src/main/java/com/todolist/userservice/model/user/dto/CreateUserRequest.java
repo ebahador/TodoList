@@ -1,4 +1,4 @@
-package com.todolist.userservice.model.user;
+package com.todolist.userservice.model.user.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;

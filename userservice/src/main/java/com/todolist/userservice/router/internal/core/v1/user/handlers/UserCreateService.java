@@ -1,9 +1,9 @@
 package com.todolist.userservice.router.internal.core.v1.user.handlers;
 
 import com.todolist.userservice.database.Dao;
-import com.todolist.userservice.model.user.CreateUserRequest;
 import com.todolist.userservice.model.user.User;
-import com.todolist.userservice.model.user.UserResponse;
+import com.todolist.userservice.model.user.dto.CreateUserRequest;
+import com.todolist.userservice.model.user.dto.UserResponse;
 import com.todolist.userservice.router.ApiResponse;
 import com.todolist.userservice.router.utils.StrUtils;
 import java.util.UUID;

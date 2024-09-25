@@ -12,7 +12,7 @@ public class StrUtils {
 
   public static boolean validateEmailAddress(String emailStr) {
     Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
-    return matcher.matches();
+    return matcher.matches() && emailStr.length() > 5;
   }
 
   public static long timestampToMillis(String timestamp) {

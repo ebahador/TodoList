@@ -1,4 +1,4 @@
-package com.todolist.userservice.model.user;
+package com.todolist.userservice.model.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.jetbrains.annotations.NotNull;

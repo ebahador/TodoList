@@ -1,6 +1,7 @@
 package com.todolist.userservice.database;
 
 import com.todolist.userservice.model.user.User;
+import com.todolist.userservice.model.user.dto.UpdateUserRequest;
 import com.todolist.userservice.router.utils.StrUtils;
 import java.sql.Timestamp;
 import java.util.List;
@@ -87,6 +88,16 @@ public class Dao {
     } catch (Exception e) {
       logger.error("Failed to check if user exists", e);
       throw new RuntimeException("Database check operation failed: " + e.getMessage(), e);
+    }
+  }
+
+  public void updateUser(String userId, UpdateUserRequest userRequest) {
+    try {
+      String sqlQuery = "UPDATE users SET fullname=?, email=? WHERE id=?";
+      jdbcTemplate.update(sqlQuery, userRequest.getFullname(), userRequest.getEmail(), userId);
+    } catch (Exception e) {
+      logger.error("Failed to update user into the database: {}", userRequest, e);
+      throw new RuntimeException(e);
     }
   }
 }
