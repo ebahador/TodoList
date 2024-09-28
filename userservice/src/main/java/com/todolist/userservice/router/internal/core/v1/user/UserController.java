@@ -1,8 +1,8 @@
 package com.todolist.userservice.router.internal.core.v1.user;
 
-import com.todolist.userservice.model.user.dto.CreateUserRequest;
-import com.todolist.userservice.model.user.dto.UpdateUserRequest;
-import com.todolist.userservice.model.user.dto.UserResponse;
+import com.todolist.userservice.model.user.dto.CreateUserRequestDto;
+import com.todolist.userservice.model.user.dto.UpdateUserRequestDto;
+import com.todolist.userservice.model.user.dto.UserResponseDto;
 import com.todolist.userservice.router.ApiResponse;
 import com.todolist.userservice.router.internal.core.v1.user.handlers.UserCreateService;
 import com.todolist.userservice.router.internal.core.v1.user.handlers.UserInfoService;
@@ -35,27 +35,27 @@ public class UserController {
   }
 
   @PostMapping("/users")
-  public ResponseEntity<ApiResponse<UserResponse>> createUser(
-      @RequestBody CreateUserRequest userRequest) {
+  public ResponseEntity<ApiResponse<UserResponseDto>> createUser(
+      @RequestBody CreateUserRequestDto userRequest) {
     logger.info("Creating new user: {}", userRequest.toString());
     return userCreateService.createUser(userRequest);
   }
 
   @GetMapping("/users")
-  public ResponseEntity<ApiResponse<List<UserResponse>>> getAllUsers() {
+  public ResponseEntity<ApiResponse<List<UserResponseDto>>> getAllUsers() {
     logger.info("Retrieving all users");
     return userInfoService.getAllUsers();
   }
 
   @GetMapping("/users/{id}")
-  public ResponseEntity<ApiResponse<UserResponse>> getSingleUserInfo(@PathVariable String id) {
+  public ResponseEntity<ApiResponse<UserResponseDto>> getSingleUserInfo(@PathVariable String id) {
     logger.info("Retrieving user by id: {}", id);
     return userInfoService.getSingleUserById(id);
   }
 
   @PatchMapping("/users/{id}")
-  public ResponseEntity<ApiResponse<UserResponse>> updateUserInfo(
-      @PathVariable String id, @RequestBody UpdateUserRequest userRequest) {
+  public ResponseEntity<ApiResponse<UserResponseDto>> updateUserInfo(
+      @PathVariable String id, @RequestBody UpdateUserRequestDto userRequest) {
     logger.info("Updating user: {}", userRequest.toString());
     return userUpdateService.updateUserById(id, userRequest);
   }

@@ -2,8 +2,8 @@ package com.todolist.userservice.router.internal.core.v1.user.handlers;
 
 import com.todolist.userservice.database.Dao;
 import com.todolist.userservice.model.user.User;
-import com.todolist.userservice.model.user.dto.CreateUserRequest;
-import com.todolist.userservice.model.user.dto.UserResponse;
+import com.todolist.userservice.model.user.dto.CreateUserRequestDto;
+import com.todolist.userservice.model.user.dto.UserResponseDto;
 import com.todolist.userservice.router.ApiResponse;
 import com.todolist.userservice.router.utils.StrUtils;
 import java.util.UUID;
@@ -25,40 +25,40 @@ public class UserCreateService {
     this.dao = dao;
   }
 
-  public ResponseEntity<ApiResponse<UserResponse>> createUser(CreateUserRequest userRequest) {
+  public ResponseEntity<ApiResponse<UserResponseDto>> createUser(CreateUserRequestDto userRequest) {
     try {
-      UserResponse partialResponse;
+      UserResponseDto partialResponse;
       // Check if email or fullname is null or empty
       if (userRequest.getEmail() == null || userRequest.getEmail().isEmpty()) {
-        ApiResponse<UserResponse> apiResponse =
+        ApiResponse<UserResponseDto> apiResponse =
             new ApiResponse<>("Email address is null", null, null);
         logger.warn("Email address is empty");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
       }
 
       if (userRequest.getFullname() == null || userRequest.getFullname().isEmpty()) {
-        ApiResponse<UserResponse> apiResponse = new ApiResponse<>("Fullname is null", null, null);
+        ApiResponse<UserResponseDto> apiResponse = new ApiResponse<>("Fullname is null", null, null);
         logger.warn("Fullname is null");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
       }
 
       if (userRequest.getFullname().length() < 3) {
-        ApiResponse<UserResponse> apiResponse =
+        ApiResponse<UserResponseDto> apiResponse =
             new ApiResponse<>("Fullname should be more than 3 characters!", null, null);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
       }
 
       // Check if email already exists
       if (dao.emailAddressExists(userRequest.getEmail())) {
-        ApiResponse<UserResponse> apiResponse =
+        ApiResponse<UserResponseDto> apiResponse =
             new ApiResponse<>("Email address already exists", null, null);
         logger.warn("Email address already exists!");
         return ResponseEntity.status(HttpStatus.CONFLICT).body(apiResponse);
       }
 
       if (!StrUtils.validateEmailAddress(userRequest.getEmail())) {
-        partialResponse = new UserResponse.Builder().email(userRequest.getEmail()).build();
-        ApiResponse<UserResponse> apiResponse =
+        partialResponse = new UserResponseDto.Builder().email(userRequest.getEmail()).build();
+        ApiResponse<UserResponseDto> apiResponse =
             new ApiResponse<>("Email address format is invalid", null, partialResponse);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
       }
@@ -75,15 +75,15 @@ public class UserCreateService {
       dao.addUserToDb(user);
 
       // Build the response
-      UserResponse response =
-          new UserResponse.Builder()
+      UserResponseDto response =
+          new UserResponseDto.Builder()
               .id(user.getId())
               .fullname(user.getFullname())
               .email(user.getEmail())
               .lastLogin(user.getLastLogin())
               .build();
 
-      ApiResponse<UserResponse> apiResponse = new ApiResponse<>(null, 1, response);
+      ApiResponse<UserResponseDto> apiResponse = new ApiResponse<>(null, 1, response);
       return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     } catch (Exception e) {
       logger.error("Error while creating user", e);

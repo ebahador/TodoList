@@ -2,8 +2,8 @@ package com.todolist.userservice.router.internal.core.v1.user.handlers;
 
 import com.todolist.userservice.database.Dao;
 import com.todolist.userservice.model.user.User;
-import com.todolist.userservice.model.user.dto.UpdateUserRequest;
-import com.todolist.userservice.model.user.dto.UserResponse;
+import com.todolist.userservice.model.user.dto.UpdateUserRequestDto;
+import com.todolist.userservice.model.user.dto.UserResponseDto;
 import com.todolist.userservice.router.ApiResponse;
 import com.todolist.userservice.router.utils.StrUtils;
 import org.jetbrains.annotations.NotNull;
@@ -25,9 +25,9 @@ public class UserUpdateService {
     this.dao = dao;
   }
 
-  public ResponseEntity<ApiResponse<UserResponse>> updateUserById(
-      String id, @NotNull UpdateUserRequest request) {
-    UserResponse partialResponse;
+  public ResponseEntity<ApiResponse<UserResponseDto>> updateUserById(
+      String id, @NotNull UpdateUserRequestDto request) {
+    UserResponseDto partialResponse;
     try {
       if (!dao.userExists(id)) {
         logger.error("User with id {} does not exist", id);
@@ -49,8 +49,8 @@ public class UserUpdateService {
       }
 
       if (!StrUtils.validateEmailAddress(request.getEmail())) {
-        partialResponse = new UserResponse.Builder().email(request.getEmail()).build();
-        ApiResponse<UserResponse> apiResponse =
+        partialResponse = new UserResponseDto.Builder().email(request.getEmail()).build();
+        ApiResponse<UserResponseDto> apiResponse =
             new ApiResponse<>("Email address format is invalid", 0, partialResponse);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
       }
@@ -60,14 +60,14 @@ public class UserUpdateService {
 
       User user = dao.getUserById(id);
 
-      UserResponse response =
-          new UserResponse.Builder()
+      UserResponseDto response =
+          new UserResponseDto.Builder()
               .id(user.getId())
               .fullname(user.getFullname())
               .email(user.getFullname())
               .lastLogin(user.getLastLogin())
               .build();
-      ApiResponse<UserResponse> apiResponse = new ApiResponse<>(null, 1, response);
+      ApiResponse<UserResponseDto> apiResponse = new ApiResponse<>(null, 1, response);
       return ResponseEntity.ok(apiResponse);
     } catch (NullPointerException e) {
       logger.error("Failed to update user with id {} because of Missing Parameter", id, e);

@@ -1,7 +1,8 @@
 package com.todolist.userservice.database;
 
+import com.todolist.userservice.model.token.Token;
 import com.todolist.userservice.model.user.User;
-import com.todolist.userservice.model.user.dto.UpdateUserRequest;
+import com.todolist.userservice.model.user.dto.UpdateUserRequestDto;
 import com.todolist.userservice.router.utils.StrUtils;
 import java.sql.Timestamp;
 import java.util.List;
@@ -91,7 +92,7 @@ public class Dao {
     }
   }
 
-  public void updateUser(String userId, UpdateUserRequest userRequest) {
+  public void updateUser(String userId, UpdateUserRequestDto userRequest) {
     try {
       String sqlQuery = "UPDATE users SET fullname=?, email=? WHERE id=?";
       jdbcTemplate.update(sqlQuery, userRequest.getFullname(), userRequest.getEmail(), userId);
@@ -99,5 +100,19 @@ public class Dao {
       logger.error("Failed to update user into the database: {}", userRequest, e);
       throw new RuntimeException(e);
     }
+  }
+
+  public void createApiToken(Token token) {
+    try {
+      String sqlQuery = "INSERT INTO api_token (id, user_id, token, expiery_date, creation_date, is_active)";
+      jdbcTemplate.update(sqlQuery, token.getTokenId(), token.getUserId(), token.getToken(), token.getExpiryDate(), token.getCreationDate(), token.isActive());
+    } catch (Exception e) {
+      logger.error("Failed to insert token into the database: {}", token, e);
+      throw new RuntimeException(e);
+    }
+  }
+
+  private boolean isTokenValid(Token token) {
+
   }
 }

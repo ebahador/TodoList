@@ -1,16 +1,17 @@
 package com.todolist.userservice.model.user.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserResponse {
+@JsonDeserialize(builder = CreateUserRequestDto.Builder.class)
+public class CreateUserRequestDto {
   private final String id;
   private final String fullname;
   private final String email;
   private final long lastLogin;
 
-  private UserResponse(@NotNull Builder builder) {
+  private CreateUserRequestDto(@NotNull Builder builder) {
     this.id = builder.id;
     this.fullname = builder.fullname;
     this.email = builder.email;
@@ -34,23 +35,24 @@ public class UserResponse {
     return this.lastLogin;
   }
 
+  @JsonPOJOBuilder(withPrefix = "")
   public static class Builder {
     private String id;
     private String fullname;
     private String email;
     private long lastLogin;
 
-    public UserResponse build() {
-      return new UserResponse(this);
+    public CreateUserRequestDto build() {
+      return new CreateUserRequestDto(this);
     }
 
     public Builder() {}
 
-    public Builder(@NotNull UserResponse userResponse) {
-      this.id = userResponse.id;
-      this.fullname = userResponse.fullname;
-      this.email = userResponse.email;
-      this.lastLogin = userResponse.lastLogin;
+    public Builder(@NotNull CreateUserRequestDto createUserRequestDto) {
+      this.id = createUserRequestDto.id;
+      this.fullname = createUserRequestDto.fullname;
+      this.email = createUserRequestDto.email;
+      this.lastLogin = createUserRequestDto.lastLogin;
     }
 
     public Builder id(String val) {
@@ -76,7 +78,7 @@ public class UserResponse {
 
   @Override
   public String toString() {
-    return "CreateUserResponse{"
+    return "CreateUserRequest{"
         + "id='"
         + id
         + '\''

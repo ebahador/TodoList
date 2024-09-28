@@ -4,14 +4,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import org.jetbrains.annotations.NotNull;
 
-@JsonDeserialize(builder = UpdateUserRequest.Builder.class)
-public class UpdateUserRequest {
+@JsonDeserialize(builder = UpdateUserRequestDto.Builder.class)
+public class UpdateUserRequestDto {
   private String fullname;
   private String email;
 
-  private UpdateUserRequest() {}
+  private UpdateUserRequestDto() {}
 
-  private UpdateUserRequest(Builder builder) {
+  private UpdateUserRequestDto(Builder builder) {
     this.fullname = builder.fullname;
     this.email = builder.email;
   }
@@ -31,13 +31,13 @@ public class UpdateUserRequest {
 
     public Builder() {}
 
-    public Builder(@NotNull UpdateUserRequest updateUserRequest) {
-      fullname = updateUserRequest.fullname;
-      email = updateUserRequest.email;
+    public Builder(@NotNull UpdateUserRequestDto updateUserRequestDto) {
+      fullname = updateUserRequestDto.fullname;
+      email = updateUserRequestDto.email;
     }
 
-    public UpdateUserRequest build() {
-      return new UpdateUserRequest(this);
+    public UpdateUserRequestDto build() {
+      return new UpdateUserRequestDto(this);
     }
 
     public Builder fullname(String val) {
