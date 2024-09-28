@@ -2,7 +2,7 @@ package com.todolist.userservice.router.internal.core.v1.user.handlers;
 
 import com.todolist.userservice.database.Dao;
 import com.todolist.userservice.model.user.User;
-import com.todolist.userservice.model.user.UserResponse;
+import com.todolist.userservice.model.user.dto.UserResponse;
 import com.todolist.userservice.router.ApiResponse;
 import java.util.List;
 import org.slf4j.Logger;
