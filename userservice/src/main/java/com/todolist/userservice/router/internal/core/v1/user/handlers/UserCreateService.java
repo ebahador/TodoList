@@ -37,7 +37,8 @@ public class UserCreateService {
       }
 
       if (userRequest.getFullname() == null || userRequest.getFullname().isEmpty()) {
-        ApiResponse<UserResponseDto> apiResponse = new ApiResponse<>("Fullname is null", null, null);
+        ApiResponse<UserResponseDto> apiResponse =
+            new ApiResponse<>("Fullname is null", null, null);
         logger.warn("Fullname is null");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
       }

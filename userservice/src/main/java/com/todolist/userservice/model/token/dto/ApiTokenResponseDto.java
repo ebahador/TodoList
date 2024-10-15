@@ -14,7 +14,7 @@ public class ApiTokenResponseDto {
 
   private ApiTokenResponseDto() {}
 
-  private ApiTokenResponseDto(Builder builder) {
+  private ApiTokenResponseDto(@NotNull Builder builder) {
     this.creationDate = builder.creationDate;
     this.userId = builder.userId;
     this.tokenId = builder.tokenId;

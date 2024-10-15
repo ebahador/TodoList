@@ -52,7 +52,8 @@ public class UserInfoService {
     try {
       if (!dao.userExists(id)) {
         logger.warn("User not found");
-        ApiResponse<UserResponseDto> apiResponse = new ApiResponse<>("User does not exist.", 0, null);
+        ApiResponse<UserResponseDto> apiResponse =
+            new ApiResponse<>("User does not exist.", 0, null);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
       } else {
         User singleUserInfo = dao.getUserById(id);

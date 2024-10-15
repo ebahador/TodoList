@@ -1,22 +1,22 @@
 package com.todolist.userservice.model.token.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import org.jetbrains.annotations.NotNull;
 
-@JsonDeserialize(builder = CreateApiTokenRequestDto.class)
+@JsonDeserialize(builder = CreateApiTokenRequestDto.Builder.class)
 public class CreateApiTokenRequestDto {
-  private String userId;
+  private final String userId;
 
   private CreateApiTokenRequestDto(@NotNull Builder builder) {
     this.userId = builder.userId;
   }
 
-  private CreateApiTokenRequestDto() {}
-
   public String getUserId() {
-    return userId;
+    return this.userId;
   }
 
+  @JsonPOJOBuilder(withPrefix = "")
   public static class Builder {
     private String userId;
 
@@ -34,5 +34,10 @@ public class CreateApiTokenRequestDto {
     public CreateApiTokenRequestDto build() {
       return new CreateApiTokenRequestDto(this);
     }
+  }
+
+  @Override
+  public String toString() {
+    return "CreateApiTokenRequestDto{" + "userId='" + userId + '\'' + '}';
   }
 }

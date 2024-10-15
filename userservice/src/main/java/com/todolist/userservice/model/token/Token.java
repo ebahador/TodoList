@@ -64,32 +64,32 @@ public class Token {
       this.isActive = token.isActive;
     }
 
-    public Builder setUserId(String val) {
+    public Builder userId(String val) {
       this.userId = val;
       return this;
     }
 
-    public Builder setTokenId(String val) {
+    public Builder tokenId(String val) {
       this.tokenId = val;
       return this;
     }
 
-    public Builder setToken(String val) {
+    public Builder token(String val) {
       this.token = val;
       return this;
     }
 
-    public Builder setExpiryDate(long val) {
+    public Builder expiryDate(long val) {
       this.expiryDate = val;
       return this;
     }
 
-    public Builder setCreationDate(long val) {
+    public Builder creationDate(long val) {
       this.creationDate = val;
       return this;
     }
 
-    public Builder setActive(boolean val) {
+    public Builder active(boolean val) {
       this.isActive = val;
       return this;
     }
@@ -97,5 +97,26 @@ public class Token {
     public Token build() {
       return new Token(this);
     }
+  }
+
+  @Override
+  public String toString() {
+    return "Token{"
+        + "userId='"
+        + userId
+        + '\''
+        + ", tokenId='"
+        + tokenId
+        + '\''
+        + ", token='"
+        + token
+        + '\''
+        + ", expiryDate="
+        + expiryDate
+        + ", creationDate="
+        + creationDate
+        + ", isActive="
+        + isActive
+        + '}';
   }
 }

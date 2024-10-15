@@ -104,15 +104,26 @@ public class Dao {
 
   public void createApiToken(Token token) {
     try {
-      String sqlQuery = "INSERT INTO api_token (id, user_id, token, expiery_date, creation_date, is_active)";
-      jdbcTemplate.update(sqlQuery, token.getTokenId(), token.getUserId(), token.getToken(), token.getExpiryDate(), token.getCreationDate(), token.isActive());
+      String sqlQuery =
+          "INSERT INTO api_token (id, user_id, token, expiery_date, creation_date, is_active) VALUES (?, ?, ?, ?, ?, ?)";
+      jdbcTemplate.update(
+          sqlQuery,
+          token.getTokenId(),
+          token.getUserId(),
+          token.getToken(),
+          new Timestamp(token.getExpiryDate()),
+          new Timestamp(token.getCreationDate()),
+          String.valueOf(token.isActive()));
+      logger.info("Successfully created api token");
     } catch (Exception e) {
       logger.error("Failed to insert token into the database: {}", token, e);
       throw new RuntimeException(e);
     }
   }
 
-  private boolean isTokenValid(Token token) {
-
-  }
+  //  private boolean isTokenValid(Token token) {
+  //    try{
+  //
+  //    }
+  //  }
 }
