@@ -121,9 +121,16 @@ public class Dao {
     }
   }
 
-  //  private boolean isTokenValid(Token token) {
-  //    try{
-  //
-  //    }
-  //  }
+  public boolean isTokenValid(String token) {
+    try {
+      String sqlQuery = "SELECT is_active FROM api_token WHERE token=?";
+      Boolean queryResult = jdbcTemplate.queryForObject(sqlQuery, Boolean.class, token);
+      return queryResult != null && queryResult;
+    } catch (Exception e) {
+      logger.error("Failed to check if token exists", e);
+      throw new RuntimeException("Database check operation failed: " + e.getMessage(), e);
+    }
+  }
+
+  public void invalidateToken(Token token) {}
 }
