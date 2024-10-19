@@ -1,7 +1,8 @@
 package com.todolist.userservice.database;
 
+import com.todolist.userservice.model.token.Token;
 import com.todolist.userservice.model.user.User;
-import com.todolist.userservice.model.user.dto.UpdateUserRequest;
+import com.todolist.userservice.model.user.dto.UpdateUserRequestDto;
 import com.todolist.userservice.router.utils.StrUtils;
 import java.sql.Timestamp;
 import java.util.List;
@@ -91,7 +92,7 @@ public class Dao {
     }
   }
 
-  public void updateUser(String userId, UpdateUserRequest userRequest) {
+  public void updateUser(String userId, UpdateUserRequestDto userRequest) {
     try {
       String sqlQuery = "UPDATE users SET fullname=?, email=? WHERE id=?";
       jdbcTemplate.update(sqlQuery, userRequest.getFullname(), userRequest.getEmail(), userId);
@@ -100,4 +101,36 @@ public class Dao {
       throw new RuntimeException(e);
     }
   }
+
+  public void createApiToken(Token token) {
+    try {
+      String sqlQuery =
+          "INSERT INTO api_token (id, user_id, token, expiery_date, creation_date, is_active) VALUES (?, ?, ?, ?, ?, ?)";
+      jdbcTemplate.update(
+          sqlQuery,
+          token.getTokenId(),
+          token.getUserId(),
+          token.getToken(),
+          new Timestamp(token.getExpiryDate()),
+          new Timestamp(token.getCreationDate()),
+          String.valueOf(token.isActive()));
+      logger.info("Successfully created api token");
+    } catch (Exception e) {
+      logger.error("Failed to insert token into the database: {}", token, e);
+      throw new RuntimeException(e);
+    }
+  }
+
+  public boolean isTokenValid(String token) {
+    try {
+      String sqlQuery = "SELECT is_active FROM api_token WHERE token=?";
+      Boolean queryResult = jdbcTemplate.queryForObject(sqlQuery, Boolean.class, token);
+      return queryResult != null && queryResult;
+    } catch (Exception e) {
+      logger.error("Failed to check if token exists", e);
+      throw new RuntimeException("Database check operation failed: " + e.getMessage(), e);
+    }
+  }
+
+  public void invalidateToken(Token token) {}
 }

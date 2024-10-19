@@ -1,8 +1,10 @@
-package com.todolist.userservice.model.token;
+package com.todolist.userservice.model.token.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.jetbrains.annotations.NotNull;
 
-public class Token {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class ApiTokenResponseDto {
   private String userId;
   private String tokenId;
   private String token;
@@ -10,15 +12,15 @@ public class Token {
   private long creationDate;
   private boolean isActive;
 
-  private Token() {}
+  private ApiTokenResponseDto() {}
 
-  private Token(@NotNull Builder builder) {
+  private ApiTokenResponseDto(@NotNull Builder builder) {
+    this.creationDate = builder.creationDate;
     this.userId = builder.userId;
     this.tokenId = builder.tokenId;
-    this.token = builder.token;
     this.expiryDate = builder.expiryDate;
+    this.token = builder.token;
     this.isActive = builder.isActive;
-    this.creationDate = builder.creationDate;
   }
 
   public String getUserId() {
@@ -55,13 +57,13 @@ public class Token {
 
     public Builder() {}
 
-    public Builder(@NotNull Token token) {
-      this.userId = token.userId;
-      this.tokenId = token.tokenId;
-      this.token = token.token;
-      this.expiryDate = token.expiryDate;
-      this.creationDate = token.creationDate;
-      this.isActive = token.isActive;
+    public Builder(@NotNull ApiTokenResponseDto apiTokenResponseDto) {
+      this.userId = apiTokenResponseDto.userId;
+      this.tokenId = apiTokenResponseDto.tokenId;
+      this.token = apiTokenResponseDto.token;
+      this.expiryDate = apiTokenResponseDto.expiryDate;
+      this.creationDate = apiTokenResponseDto.creationDate;
+      this.isActive = apiTokenResponseDto.isActive;
     }
 
     public Builder userId(String val) {
@@ -89,34 +91,13 @@ public class Token {
       return this;
     }
 
-    public Builder active(boolean val) {
+    public Builder isActive(boolean val) {
       this.isActive = val;
       return this;
     }
 
-    public Token build() {
-      return new Token(this);
+    public ApiTokenResponseDto build() {
+      return new ApiTokenResponseDto(this);
     }
-  }
-
-  @Override
-  public String toString() {
-    return "Token{"
-        + "userId='"
-        + userId
-        + '\''
-        + ", tokenId='"
-        + tokenId
-        + '\''
-        + ", token='"
-        + token
-        + '\''
-        + ", expiryDate="
-        + expiryDate
-        + ", creationDate="
-        + creationDate
-        + ", isActive="
-        + isActive
-        + '}';
   }
 }
