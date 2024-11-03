@@ -1,4 +1,4 @@
-package model.task;
+package com.todolist.taskservice.model.task;
 
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
@@ -74,6 +74,8 @@ public class Task {
     private long creationDate;
     private Optional<Long> deadline = Optional.empty();
 
+    public Builder() {}
+
     public Builder(@NotNull Task task) {
       this.taskId = task.taskId;
       this.summary = task.summary;
@@ -134,5 +136,34 @@ public class Task {
     public Task build() {
       return new Task(this);
     }
+  }
+
+  @Override
+  public String toString() {
+    return "Task{"
+        + "taskId='"
+        + taskId
+        + '\''
+        + ", summary='"
+        + summary
+        + '\''
+        + ", description='"
+        + description
+        + '\''
+        + ", status='"
+        + status
+        + '\''
+        + ", creator='"
+        + creator
+        + '\''
+        + ", priority="
+        + priority
+        + ", assignee="
+        + assignee
+        + ", creationDate="
+        + creationDate
+        + ", deadline="
+        + deadline
+        + '}';
   }
 }
