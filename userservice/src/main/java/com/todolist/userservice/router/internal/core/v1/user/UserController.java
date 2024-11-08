@@ -1,5 +1,6 @@
 package com.todolist.userservice.router.internal.core.v1.user;
 
+import com.todolist.userservice.database.Dao;
 import com.todolist.userservice.model.user.dto.CreateUserRequestDto;
 import com.todolist.userservice.model.user.dto.UpdateUserRequestDto;
 import com.todolist.userservice.model.user.dto.UserResponseDto;
@@ -22,16 +23,19 @@ public class UserController {
   private final UserInfoService userInfoService;
   private static Logger logger;
   private final UserUpdateService userUpdateService;
+  private final Dao dao;
 
   @Autowired
   public UserController(
       UserCreateService userCreateService,
       UserInfoService userInfoService,
-      UserUpdateService userUpdateService) {
+      UserUpdateService userUpdateService,
+      Dao dao) {
     this.userCreateService = userCreateService;
     this.userInfoService = userInfoService;
     logger = LoggerFactory.getLogger(UserController.class);
     this.userUpdateService = userUpdateService;
+    this.dao = dao;
   }
 
   @PostMapping("/users")
@@ -58,5 +62,16 @@ public class UserController {
       @PathVariable String id, @RequestBody UpdateUserRequestDto userRequest) {
     logger.info("Updating user: {}", userRequest.toString());
     return userUpdateService.updateUserById(id, userRequest);
+  }
+
+  @RequestMapping(value = "/users/{userId}/validate", method = RequestMethod.HEAD)
+  public ResponseEntity<Void> validateUser(@PathVariable String userId) {
+    logger.info("Validating user: {}", userId);
+    if (dao.userExists(userId)) {
+      logger.info("User {} is valid!", userId);
+      return ResponseEntity.ok().build();
+    }
+    logger.info("User {} is not valid!", userId);
+    return ResponseEntity.notFound().build();
   }
 }

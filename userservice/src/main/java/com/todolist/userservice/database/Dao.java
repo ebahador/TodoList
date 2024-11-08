@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
@@ -125,9 +126,12 @@ public class Dao {
     try {
       String sqlQuery = "SELECT is_active FROM api_token WHERE token=?";
       Boolean queryResult = jdbcTemplate.queryForObject(sqlQuery, Boolean.class, token);
-      return queryResult != null && queryResult;
+      return Boolean.TRUE.equals(queryResult);
+    } catch (EmptyResultDataAccessException e) {
+      logger.warn("Token not found in the database: {}", StrUtils.maskToken(token));
+      return false;
     } catch (Exception e) {
-      logger.error("Failed to check if token exists", e);
+      logger.error("Failed to check if token exists: {}", StrUtils.maskToken(token), e);
       throw new RuntimeException("Database check operation failed: " + e.getMessage(), e);
     }
   }
