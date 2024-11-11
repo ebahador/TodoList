@@ -1,5 +1,7 @@
 package com.todolist.userservice.router.utils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,5 +25,11 @@ public class StrUtils {
     } catch (ParseException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  public @NotNull static String maskToken(String token) {
+    return (token == null || token.length() < 8)
+            ? "****"
+            : token.substring(0, 4) + "****" + token.substring(token.length() - 4);
   }
 }
