@@ -1,5 +1,9 @@
 package com.todolist.taskservice.router.internal.core.v1.task.handler;
 
+import com.todolist.taskservice.webconfig.UserServiceValidators;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.reactive.function.client.WebClient;
+
 import com.todolist.taskservice.database.Dao;
 import com.todolist.taskservice.model.dto.CreateTaskRequestDto;
 import com.todolist.taskservice.model.dto.TaskResponseDto;
@@ -15,17 +19,23 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TaskCreateService {
-  private Logger logger = LoggerFactory.getLogger(TaskCreateService.class);
-  private Dao dao;
+  private final Logger logger = LoggerFactory.getLogger(TaskCreateService.class);
+  private final Dao dao;
+  private final WebClient webClient;
+  private final HttpServletRequest inLineRequest;
 
   @Autowired
-  public TaskCreateService(Dao dao) {
+  public TaskCreateService(WebClient webClient, Dao dao, HttpServletRequest inLineRequest) {
+    this.webClient = webClient;
     this.dao = dao;
+    this.inLineRequest = inLineRequest;
   }
 
   public ResponseEntity<ApiResponse<TaskResponseDto>> createTask(
       CreateTaskRequestDto createTaskRequest) {
     try {
+      String authHeader = inLineRequest.getHeader("Authorization");
+
       if (createTaskRequest == null) {
         ApiResponse<TaskResponseDto> apiResponse =
             new ApiResponse<>("Request body is null.", null, null);
@@ -33,11 +43,35 @@ public class TaskCreateService {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
       }
 
+      if (!UserServiceValidators.isUserIdValid(
+          createTaskRequest.getCreator(), authHeader, webClient, logger)) {
+        logger.warn("User id is invalid or not found!");
+        ApiResponse<TaskResponseDto> apiResponse =
+            new ApiResponse<>("User id is invalid or not found.", null, null);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+      }
+
       if (createTaskRequest.getCreator() == null) {
         logger.warn("Create task creator is null!");
         ApiResponse<TaskResponseDto> apiResponse =
             new ApiResponse<>("Create task creator is null.", null, null);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+      }
+
+      // Check if Authorization header is missing or doesn't start with "Bearer"
+      if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        logger.warn("Missing or invalid Authorization header");
+        ApiResponse<TaskResponseDto> apiResponse =
+            new ApiResponse<>("Missing or invalid Authorization header.", null, null);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiResponse);
+      }
+
+      if (!UserServiceValidators.isTokenValid(
+          authHeader.substring(7).trim(), authHeader, webClient, logger)) {
+        logger.warn("Token is invalid or not found!");
+        ApiResponse<TaskResponseDto> apiResponse =
+            new ApiResponse<>("Token is invalid. Unauthorized user.", null, null);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiResponse);
       }
 
       if (createTaskRequest.getStatus() == null) {
@@ -67,7 +101,7 @@ public class TaskCreateService {
               .priority(createTaskRequest.getPriority().orElse(null))
               .creationDate(System.currentTimeMillis())
               .build();
-      logger.info("Create task: " + task);
+      logger.info("Create task: {}", task);
 
       dao.createNewTask(task);
 
