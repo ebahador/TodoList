@@ -1,5 +1,6 @@
 package com.todolist.userservice.router.internal.core.v1.user.handlers;
 
+import ch.qos.logback.core.util.StringUtil;
 import com.todolist.userservice.database.Dao;
 import com.todolist.userservice.model.user.User;
 import com.todolist.userservice.model.user.dto.UserResponseDto;
@@ -11,20 +12,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Service
 public class UserInfoService {
-  private Dao dao;
-  private Logger logger = LoggerFactory.getLogger(UserInfoService.class);
+  private final Dao dao;
+  private final Logger logger = LoggerFactory.getLogger(UserInfoService.class);
 
   @Autowired
   public UserInfoService(Dao dao) {
     this.dao = dao;
   }
 
-  public ResponseEntity<ApiResponse<List<UserResponseDto>>> getAllUsers() {
+  public ResponseEntity<ApiResponse<List<UserResponseDto>>> getAllUsers(
+      @RequestParam(required = false) String email) {
     try {
-      List<User> allUsersList = dao.getUsers();
+      List<User> allUsersList;
+
+      if (StringUtil.notNullNorEmpty(email)) {
+        allUsersList = dao.getUserIdByEmailAddress(email);
+        logger.debug("Fetching users from database with email filter: {}", email);
+      } else {
+        allUsersList = dao.getUsers();
+        logger.debug("Fetching users from database without email filter: {}", email);
+      }
+
       logger.debug("allUsersString: {}", allUsersList);
 
       List<UserResponseDto> userResponsDtos =

@@ -6,6 +6,8 @@ import com.todolist.userservice.model.user.dto.UpdateUserRequestDto;
 import com.todolist.userservice.router.utils.StrUtils;
 import java.sql.Timestamp;
 import java.util.List;
+
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +74,8 @@ public class Dao {
     }
   }
 
-  private RowMapper<User> userRowMapper() {
+  @Contract(pure = true)
+  private @NotNull RowMapper<User> userRowMapper() {
     return (rs, rowNum) ->
         new User.Builder()
             .id(rs.getString("id"))
@@ -132,6 +135,17 @@ public class Dao {
       return false;
     } catch (Exception e) {
       logger.error("Failed to check if token exists: {}", StrUtils.maskToken(token), e);
+      throw new RuntimeException("Database check operation failed: " + e.getMessage(), e);
+    }
+  }
+
+  public List<User> getUserIdByEmailAddress(String email) {
+    try{
+      String sqlQuery = "SELECT * FROM users WHERE email=?";
+      logger.info("Getting userId by email address \"{}\"", email);
+      return jdbcTemplate.query(sqlQuery, userRowMapper(), email);
+    } catch (Exception e) {
+      logger.error("Failed to get user id by email address: {}", email, e);
       throw new RuntimeException("Database check operation failed: " + e.getMessage(), e);
     }
   }
