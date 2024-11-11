@@ -1,4 +1,4 @@
-package database;
+package com.todolist.taskservice.database;
 
 import javax.sql.DataSource;
 import org.apache.commons.dbcp2.BasicDataSource;
