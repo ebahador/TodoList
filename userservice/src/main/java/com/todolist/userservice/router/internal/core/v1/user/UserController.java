@@ -46,9 +46,10 @@ public class UserController {
   }
 
   @GetMapping("/users")
-  public ResponseEntity<ApiResponse<List<UserResponseDto>>> getAllUsers() {
+  public ResponseEntity<ApiResponse<List<UserResponseDto>>> getAllUsers(
+      @RequestParam(required = false) String email) {
     logger.info("Retrieving all users");
-    return userInfoService.getAllUsers();
+    return userInfoService.getAllUsers(email);
   }
 
   @GetMapping("/users/{id}")
