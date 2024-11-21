@@ -1,16 +1,18 @@
 package com.todolist.taskservice.model.dto;
 
+import java.util.Optional;
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+
 import jakarta.validation.constraints.NotNull;
-import java.util.Optional;
 
 @JsonDeserialize(builder = CreateTaskRequestDto.Builder.class)
 public class CreateTaskRequestDto {
   private String id;
   private String summary;
   private String description;
-  private String status;
+  private Integer status;
   private String creator;
   private Optional<String> priority = Optional.empty();
   private Optional<String> assignee = Optional.empty();
@@ -39,7 +41,7 @@ public class CreateTaskRequestDto {
     return description;
   }
 
-  public String getStatus() {
+  public Integer getStatus() {
     return status;
   }
 
@@ -64,13 +66,14 @@ public class CreateTaskRequestDto {
     private String id;
     private String summary;
     private String description;
-    private String status;
+    private Integer status;
     private String creator;
     private Optional<String> priority = Optional.empty();
     private Optional<String> assignee = Optional.empty();
     private Optional<Long> deadline = Optional.empty();
 
-    public Builder() {}
+    public Builder() {
+    }
 
     public Builder(CreateTaskRequestDto createTaskRequestDto) {
       this.id = createTaskRequestDto.id;
@@ -98,7 +101,7 @@ public class CreateTaskRequestDto {
       return this;
     }
 
-    public Builder status(String val) {
+    public Builder status(Integer val) {
       this.status = val;
       return this;
     }
@@ -118,7 +121,7 @@ public class CreateTaskRequestDto {
       return this;
     }
 
-    public Builder deadline(long val) {
+    public Builder deadline(Long val) {
       this.deadline = Optional.of(val);
       return this;
     }

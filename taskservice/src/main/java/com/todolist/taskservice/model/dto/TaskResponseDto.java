@@ -1,19 +1,21 @@
 package com.todolist.taskservice.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.Optional;
+
 import org.jetbrains.annotations.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TaskResponseDto {
   private String id;
   private String summary;
   private String description;
-  private String status;
+  private Integer status;
   private String creator;
   private Optional<String> priority = Optional.empty();
   private Optional<String> assignee = Optional.empty();
-  private long creationDate;
+  private Long creationDate;
   private Optional<Long> deadline = Optional.empty();
 
   private TaskResponseDto(@NotNull Builder builder) {
@@ -40,7 +42,7 @@ public class TaskResponseDto {
     return description;
   }
 
-  public String getStatus() {
+  public Integer getStatus() {
     return status;
   }
 
@@ -56,7 +58,7 @@ public class TaskResponseDto {
     return assignee;
   }
 
-  public long getCreationDate() {
+  public Long getCreationDate() {
     return creationDate;
   }
 
@@ -68,14 +70,15 @@ public class TaskResponseDto {
     private String id;
     private String summary;
     private String description;
-    private String status;
+    private Integer status;
     private String creator;
     private Optional<String> priority = Optional.empty();
     private Optional<String> assignee = Optional.empty();
-    private long creationDate;
+    private Long creationDate;
     private Optional<Long> deadline = Optional.empty();
 
-    public Builder() {}
+    public Builder() {
+    }
 
     public Builder(TaskResponseDto taskResponseDto) {
       this.id = taskResponseDto.getId();
@@ -104,7 +107,7 @@ public class TaskResponseDto {
       return this;
     }
 
-    public Builder status(String val) {
+    public Builder status(Integer val) {
       this.status = val;
       return this;
     }
@@ -124,12 +127,12 @@ public class TaskResponseDto {
       return this;
     }
 
-    public Builder creationDate(long val) {
+    public Builder creationDate(Long val) {
       this.creationDate = val;
       return this;
     }
 
-    public Builder deadline(long val) {
+    public Builder deadline(Long val) {
       this.deadline = Optional.of(val);
       return this;
     }

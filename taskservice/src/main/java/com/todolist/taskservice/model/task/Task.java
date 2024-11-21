@@ -1,17 +1,18 @@
 package com.todolist.taskservice.model.task;
 
 import java.util.Optional;
+
 import org.jetbrains.annotations.NotNull;
 
 public class Task {
   private String taskId;
   private String summary;
   private String description;
-  private String status;
+  private Integer status;
   private String creator;
   private Optional<String> priority = Optional.empty();
   private Optional<String> assignee = Optional.empty();
-  private long creationDate;
+  private Long creationDate;
   private Optional<Long> deadline = Optional.empty();
 
   public Task(@NotNull Builder builder) {
@@ -39,7 +40,7 @@ public class Task {
     return description;
   }
 
-  public String getStatus() {
+  public Integer getStatus() {
     return status;
   }
 
@@ -55,7 +56,7 @@ public class Task {
     return assignee;
   }
 
-  public long getCreationDate() {
+  public Long getCreationDate() {
     return creationDate;
   }
 
@@ -67,14 +68,15 @@ public class Task {
     private String taskId;
     private String summary;
     private String description;
-    private String status;
+    private Integer status;
     private String creator;
     private Optional<String> priority = Optional.empty();
     private Optional<String> assignee = Optional.empty();
-    private long creationDate;
+    private Long creationDate;
     private Optional<Long> deadline = Optional.empty();
 
-    public Builder() {}
+    public Builder() {
+    }
 
     public Builder(@NotNull Task task) {
       this.taskId = task.taskId;
@@ -123,12 +125,12 @@ public class Task {
       return this;
     }
 
-    public Builder creationDate(long val) {
+    public Builder creationDate(Long val) {
       this.creationDate = val;
       return this;
     }
 
-    public Builder deadline(long val) {
+    public Builder deadline(Long val) {
       this.deadline = Optional.of(val);
       return this;
     }
